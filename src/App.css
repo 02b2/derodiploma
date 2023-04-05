@@ -1,0 +1,75 @@
+.bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  min-height: 100%;
+  z-index: -1;
+  object-fit: cover;
+}
+
+.App {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  position: relative;
+}
+
+.container {
+  perspective: 1000px;
+}
+
+.input-3d {
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  transition: transform 0.5s;
+  background-color: #fff;
+  color: #000;
+}
+
+.input-3d:hover {
+  transform: rotateX(20deg) rotateY(20deg);
+}
+
+
+/* Add media queries for medium and small screens */
+@media (max-width: 1024px) {
+  .App {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .App {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    background-color: #4B5563; /* blue-600 */
+  }
+  50% {
+    background-color: #6B46C1; /* purple-500 */
+  }
+  100% {
+    background-color: #4B5563; /* blue-600 */
+  }
+}
+
+.pulse {
+  animation: pulse 2s linear infinite;
+}
+
+.pulse:active {
+  animation: none;
+  background-color: #4C1D95; /* purple-600 */
+}
+
+
