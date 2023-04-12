@@ -16,9 +16,31 @@ End Function
 // This function is used to initialize parameters during install time
 // InitializePrivate initializes a private SC
 Function InitializePrivate() Uint64
-10  STORE("owner", SIGNER())   // Store in DB  ["owner"] = address
+10 STORE("owner", SIGNER())   // Store in DB  ["owner"] = address
+15 STORE("tokenName", "PEDR0TOKEN")
+16 STORE("tokenSymbol", "PTN")
+17 STORE("tokenImageURL", "https://ibb.co/3MsRCQp")
+18 STORE("tokenDecimals", 5)
 30 SEND_ASSET_TO_ADDRESS(SIGNER(), 1600000, SCID()) // Gives initial encrypted balance of 1600000. 
 40 RETURN 0 
+End Function
+
+
+// Functions to retrieve token information
+Function GetTokenName() String
+10 RETURN LOAD("tokenName")
+End Function
+
+Function GetTokenSymbol() String
+10 RETURN LOAD("tokenSymbol")
+End Function
+
+Function GetTokenImageURL() String
+10 RETURN LOAD("tokenImageURL")
+End Function
+
+Function GetTokenDecimals() Uint64
+10 RETURN LOAD("tokenDecimals")
 End Function
 
 // This function is used to change owner 
