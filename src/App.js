@@ -22,6 +22,10 @@ function App() {
     const [amount1, setAmount1] = useState(0);
     const [recipient, setRecipient] = useState('');
     const [assetScid, setAssetScid] = useState('');
+    const [sender, setSender] = useState("");
+const [destination, setDestination] = useState("");
+const [amount, setAmount] = useState("");
+
 
 
 
@@ -117,18 +121,28 @@ function App() {
     // }, [])
   
 
-    const transferDERO = React.useCallback(async () => {
-      const deroBridgeApi = deroBridgeApiRef.current
-      const [err, res] = await to(deroBridgeApi.wallet('start-transfer', {
-        transfers: [{
-          destination: 'deto1qywgdwt9j6la3gfn5859czqqzg7c4cc856f2w5lxusg494ytkaflkqqrw7mmz',
-          amount: 100000,
-        }]
-      }))
-  
-      if (err) alert(err.message)
-      else alert(JSON.stringify(res))
-    }, [])
+    const transferDERO = React.useCallback(
+      async (event) => {
+        event.preventDefault(); // Prevent form submission from refreshing the page
+    
+        const deroBridgeApi = deroBridgeApiRef.current;
+        const [err, res] = await to(
+          deroBridgeApi.wallet("start-transfer", {
+            transfers: [
+              {
+                destination: destination,
+                amount: parseInt(amount, 10),
+              },
+            ],
+          })
+        );
+    
+        if (err) alert(err.message);
+        else alert(JSON.stringify(res));
+      },
+      [destination, amount]
+    );
+    
   
     // const transferAsset = React.useCallback(async () => {
     //   const deroBridgeApi = deroBridgeApiRef.current
@@ -243,25 +257,37 @@ function App() {
       <p>Amount</p>
       <input className='text-black' id="amount1" type="text" value={amount1} onChange={(e) => setAmount1(e.target.value)} />
       <p>Recipient</p>
-      <input className='text-black' id="amount1" type="text" value={recipient} onChange={(e) => setRecipient(e.target.value)} />
+      <input className='text-black' id="recipient" type="text" value={recipient} onChange={(e) => setRecipient(e.target.value)} />
       <div><button className="mt-3 pulse text-white font-bold py-2 px-4 rounded" type="submit">Transfer</button></div>
     </form>
     <div className='mt-10' >
     <h3> Transfer DERO</h3>
-    <form className='mt-5' onSubmit={transferDERO}>
-      <p>Recipient Wallet Address</p>
-      <input
-      className="input-3d bg-white p-2 text-black rounded border border-gray-300 hover:transform hover:-rotate-x-20 hover:rotate-y-20 transition-transform duration-500"
-      id="walletaddress" 
-      type="text"
-      placeholder='Recipient Wallet Address' />
-      <p>Amount</p>
-      <input
-       className="input-3d bg-white p-2 text-black rounded border border-gray-300 hover:transform hover:-rotate-x-20 hover:rotate-y-20 transition-transform duration-500"
-      id="amount" 
-      placeholder='Amount'
-      type="text" />
-    </form>
+    <form className="mt-5" onSubmit={transferDERO}>
+  <p>Sender Address</p>
+  <input
+    className="input-3d bg-white p-2 text-black rounded border border-gray-300 hover:transform hover:-rotate-x-20 hover:rotate-y-20 transition-transform duration-500"
+    id="sender"
+    type="text"
+    placeholder="Sender Address"
+    onChange={(e) => setSender(e.target.value)}
+  />
+  <p>Recipient Wallet Address</p>
+  <input
+    className="input-3d bg-white p-2 text-black rounded border border-gray-300 hover:transform hover:-rotate-x-20 hover:rotate-y-20 transition-transform duration-500"
+    id="destination"
+    type="text"
+    placeholder="Recipient Wallet Address"
+    onChange={(e) => setDestination(e.target.value)}
+  />
+  <p>Amount</p>
+  <input
+    className="input-3d bg-white p-2 text-black rounded border border-gray-300 hover:transform hover:-rotate-x-20 hover:rotate-y-20 transition-transform duration-500"
+    id="amount"
+    placeholder="Amount"
+    type="text"
+    onChange={(e) => setAmount(e.target.value)}
+  />
+  </form>
     <div className='mt-5' >
     <button className="pulse text-white font-bold py-2 px-4 rounded" onClick={transferDERO}>Transfer DERO</button>
         <div><button className="mt-5 pulse text-white font-bold py-2 px-4 rounded" onClick={getWalletAddress}>Get address</button></div>
