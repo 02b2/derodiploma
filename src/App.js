@@ -5,6 +5,9 @@ import React from 'react';
 import { useState, useCallback } from 'react';
 import 'tailwindcss/tailwind.css';
 import tech from './assets/tech.mp4';
+import beautify from 'js-beautify';
+
+
 
 
 function App() {
@@ -23,8 +26,11 @@ function App() {
     const [recipient, setRecipient] = useState('');
     const [assetScid, setAssetScid] = useState('');
     const [sender, setSender] = useState("");
-const [destination, setDestination] = useState("");
-const [amount, setAmount] = useState("");
+    const [destination, setDestination] = useState("");
+    const [amount, setAmount] = useState("");
+    const [C, setC] = useState('')
+    const [receivedData, setReceivedData] = React.useState('');
+    
 
 
 
@@ -76,11 +82,41 @@ const [amount, setAmount] = useState("");
     //   const [err, res] = await to(deroBridgeApi.daemon('get-sc', {
     //     scid:"d1c1ed28b9013b4b4fc5227adfaaac6d3a496763986311e2027f7d76662884ec",
     //     variables: true
+
     //   }))
     //   setlotterygiveback(res.data.result.stringkeys.lotterygiveback)
     // })
 
-    // const GetlotteryeveryXdeposit = React.useCallback(async () => {
+    const GetCode = React.useCallback(async () => {
+      const deroBridgeApi = deroBridgeApiRef.current;
+      const [err, res] = await to(deroBridgeApi.daemon('get-sc', {
+        scid: "dcb4ac08d5d0c67445c48f92b14d8bc2b77bcac4699125ed5d29326e5eb81abd",
+        variables: true
+      }));
+    
+      if (res && res.result) {
+        const formattedCode = beautify.js(hex2a(res.data.result.stringkeys.C));
+        console.log(formattedCode);
+        setReceivedData(formattedCode);
+      } else {
+        const formattedCode = beautify.js(hex2a(res.data.result.stringkeys.C));
+        console.log(formattedCode);
+        setReceivedData(formattedCode);
+      }
+    
+      console.log(res);
+    });
+    
+
+    const hex2a = (hex) => {
+      var str = '';
+      for (var i = 0; i < hex.length; i += 2) {
+        str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+      }
+      return str;
+    };
+
+    // const Getcontractvariables = React.useCallback(async () => {
     //   const deroBridgeApi = deroBridgeApiRef.current
     //   const [err, res] = await to(deroBridgeApi.daemon('get-sc', {
     //     scid:"d1c1ed28b9013b4b4fc5227adfaaac6d3a496763986311e2027f7d76662884ec",
@@ -221,7 +257,7 @@ const [amount, setAmount] = useState("");
     
     const getWalletAssetBalance = React.useCallback(async () => {
       const deroBridgeApi = deroBridgeApiRef.current;
-      const [err, res] = await to(deroBridgeApi.wallet('get-balance', { SCID: '9bed9ab781c3006bf8bb29367f4c71c1d36e785edaebf35cefa9c3303bcb14c8' }));
+      const [err, res] = await to(deroBridgeApi.wallet('get-balance', { SCID: 'dcb4ac08d5d0c67445c48f92b14d8bc2b77bcac4699125ed5d29326e5eb81abd' }));
       if (err) alert(err.message);
       else 
       {
@@ -251,6 +287,11 @@ const [amount, setAmount] = useState("");
       <input id="amount" type="text" />
       <button type={"submit"}>Withdraw</button>
     </form> */}
+     <button className="w-full flex justify-center py-2 p-6 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-yellow-300 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+      onClick={GetCode}>Reveal Contract Code</button>
+                    <pre className="text-sm text-gray-700 font-mono bg-gray-200 p-4 rounded shadow overflow-x-auto max-w-full md:max-w-2xl">
+  {receivedData}
+</pre>
        <form onSubmit={transferAsset}>
       <p>SCID</p>
       <input className='text-black' id="scid1" type="text" value={scid1} onChange={(e) => setScid1(e.target.value)} />
