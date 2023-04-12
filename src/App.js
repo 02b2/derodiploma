@@ -30,6 +30,10 @@ function App() {
     const [amount, setAmount] = useState("");
     const [C, setC] = useState('')
     const [receivedData, setReceivedData] = React.useState('');
+    const [Decimals, setDecimals] = useState('');
+    const [name, setName] = useState('')
+    const [image, setImage] = useState('')
+    const [symbol, setSymbol] = useState('')
     
 
 
@@ -68,14 +72,41 @@ function App() {
     //   }))
     // })
 
-    // const GetRando = React.useCallback(async () => {
-    //   const deroBridgeApi = deroBridgeApiRef.current
-    //   const [err, res] = await to(deroBridgeApi.daemon('get-sc', {
-    //     scid:"aa5943a26940175eeea327d938d7febccaf0948a4a271d5b3dae15edeb95e190",
-    //     variables: true
-    //   }))
-    //   setRando(res.data.result.stringkeys.Rando)
-    // })
+    const GetDecimals = React.useCallback(async () => {
+      const deroBridgeApi = deroBridgeApiRef.current
+      const [err, res] = await to(deroBridgeApi.daemon('get-sc', {
+        scid:"f2ec1ff9d0f2a6175c6691d5f3035324d783bad83be763803d71017aad3d55a0",
+        variables: true
+      }))
+      setDecimals(res.data.result.stringkeys.tokenDecimals)
+    })
+
+    const GetName = React.useCallback(async () => {
+      const deroBridgeApi = deroBridgeApiRef.current
+      const [err, res] = await to(deroBridgeApi.daemon('get-sc', {
+        scid:"f2ec1ff9d0f2a6175c6691d5f3035324d783bad83be763803d71017aad3d55a0",
+        variables: true
+      }))
+      setName(hex2a(res.data.result.stringkeys.tokenName))
+    })
+
+    const Getimage_url = React.useCallback(async () => {
+      const deroBridgeApi = deroBridgeApiRef.current
+      const [err, res] = await to(deroBridgeApi.daemon('get-sc', {
+        scid:"f2ec1ff9d0f2a6175c6691d5f3035324d783bad83be763803d71017aad3d55a0",
+        variables: true
+      }))
+      setImage(hex2a(res.data.result.stringkeys.tokenImageURL))
+    })
+
+    const GetSymbol = React.useCallback(async () => {
+      const deroBridgeApi = deroBridgeApiRef.current
+      const [err, res] = await to(deroBridgeApi.daemon('get-sc', {
+        scid:"f2ec1ff9d0f2a6175c6691d5f3035324d783bad83be763803d71017aad3d55a0",
+        variables: true
+      }))
+      setSymbol(hex2a(res.data.result.stringkeys.tokenSymbol))
+    })
 
     // const Getlotterygiveback = React.useCallback(async () => {
     //   const deroBridgeApi = deroBridgeApiRef.current
@@ -90,7 +121,7 @@ function App() {
     const GetCode = React.useCallback(async () => {
       const deroBridgeApi = deroBridgeApiRef.current;
       const [err, res] = await to(deroBridgeApi.daemon('get-sc', {
-        scid: "dcb4ac08d5d0c67445c48f92b14d8bc2b77bcac4699125ed5d29326e5eb81abd",
+        scid: "f2ec1ff9d0f2a6175c6691d5f3035324d783bad83be763803d71017aad3d55a0",
         variables: true
       }));
     
@@ -257,14 +288,14 @@ function App() {
     
     const getWalletAssetBalance = React.useCallback(async () => {
       const deroBridgeApi = deroBridgeApiRef.current;
-      const [err, res] = await to(deroBridgeApi.wallet('get-balance', { SCID: 'dcb4ac08d5d0c67445c48f92b14d8bc2b77bcac4699125ed5d29326e5eb81abd' }));
+      const [err, res] = await to(deroBridgeApi.wallet('get-balance', { SCID: assetScid}));
       if (err) alert(err.message);
       else 
       {
         const assetWalletBalance = res.data.result.balance;
         setAssetWalletBalance(assetWalletBalance);
         };
-    }, [])
+    }, [assetScid])
     
     
   return (
@@ -291,7 +322,28 @@ function App() {
       onClick={GetCode}>Reveal Contract Code</button>
                     <pre className="text-sm text-gray-700 font-mono bg-gray-200 p-4 rounded shadow overflow-x-auto max-w-full md:max-w-2xl">
   {receivedData}
-</pre>
+      </pre>
+      <button className="w-full flex justify-center py-2 p-6 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-yellow-300 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+            onClick={GetDecimals}>Token Decimals</button>
+                          <pre className="text-sm text-gray-700 font-mono bg-gray-200 p-4 rounded shadow overflow-x-auto max-w-full md:max-w-2xl">
+        {Decimals}
+      </pre>
+      <button className="w-full flex justify-center py-2 p-6 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-yellow-300 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+            onClick={GetName}>Token Name</button>
+                          <pre className="text-sm text-gray-700 font-mono bg-gray-200 p-4 rounded shadow overflow-x-auto max-w-full md:max-w-2xl">
+        {name}
+      </pre>
+      <button className="w-full flex justify-center py-2 p-6 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-yellow-300 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+            onClick={Getimage_url}>Token Image URL</button>
+                          <pre className="text-sm text-gray-700 font-mono bg-gray-200 p-4 rounded shadow overflow-x-auto max-w-full md:max-w-2xl">
+        {image}
+      </pre>
+      <button className="w-full flex justify-center py-2 p-6 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-yellow-300 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+            onClick={GetSymbol}>Token Symbol</button>
+                          <pre className="text-sm text-gray-700 font-mono bg-gray-200 p-4 rounded shadow overflow-x-auto max-w-full md:max-w-2xl">
+        {symbol}
+      </pre>
+
        <form onSubmit={transferAsset}>
       <p>SCID</p>
       <input className='text-black' id="scid1" type="text" value={scid1} onChange={(e) => setScid1(e.target.value)} />
