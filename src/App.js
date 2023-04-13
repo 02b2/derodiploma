@@ -75,7 +75,7 @@ function App() {
     const GetDecimals = React.useCallback(async () => {
       const deroBridgeApi = deroBridgeApiRef.current
       const [err, res] = await to(deroBridgeApi.daemon('get-sc', {
-        scid:"f2ec1ff9d0f2a6175c6691d5f3035324d783bad83be763803d71017aad3d55a0",
+        scid:"cc489593c94a8bca1dddf133a2146d11796191267f7221e2f31c1869d84a9896",
         variables: true
       }))
       setDecimals(res.data.result.stringkeys.tokenDecimals)
@@ -84,7 +84,7 @@ function App() {
     const GetName = React.useCallback(async () => {
       const deroBridgeApi = deroBridgeApiRef.current
       const [err, res] = await to(deroBridgeApi.daemon('get-sc', {
-        scid:"f2ec1ff9d0f2a6175c6691d5f3035324d783bad83be763803d71017aad3d55a0",
+        scid:"cc489593c94a8bca1dddf133a2146d11796191267f7221e2f31c1869d84a9896",
         variables: true
       }))
       setName(hex2a(res.data.result.stringkeys.tokenName))
@@ -93,7 +93,7 @@ function App() {
     const Getimage_url = React.useCallback(async () => {
       const deroBridgeApi = deroBridgeApiRef.current
       const [err, res] = await to(deroBridgeApi.daemon('get-sc', {
-        scid:"f2ec1ff9d0f2a6175c6691d5f3035324d783bad83be763803d71017aad3d55a0",
+        scid:"cc489593c94a8bca1dddf133a2146d11796191267f7221e2f31c1869d84a9896",
         variables: true
       }))
       setImage(hex2a(res.data.result.stringkeys.tokenImageURL))
@@ -102,7 +102,7 @@ function App() {
     const GetSymbol = React.useCallback(async () => {
       const deroBridgeApi = deroBridgeApiRef.current
       const [err, res] = await to(deroBridgeApi.daemon('get-sc', {
-        scid:"f2ec1ff9d0f2a6175c6691d5f3035324d783bad83be763803d71017aad3d55a0",
+        scid:"cc489593c94a8bca1dddf133a2146d11796191267f7221e2f31c1869d84a9896",
         variables: true
       }))
       setSymbol(hex2a(res.data.result.stringkeys.tokenSymbol))
@@ -121,7 +121,7 @@ function App() {
     const GetCode = React.useCallback(async () => {
       const deroBridgeApi = deroBridgeApiRef.current;
       const [err, res] = await to(deroBridgeApi.daemon('get-sc', {
-        scid: "f2ec1ff9d0f2a6175c6691d5f3035324d783bad83be763803d71017aad3d55a0",
+        scid: "cc489593c94a8bca1dddf133a2146d11796191267f7221e2f31c1869d84a9896",
         variables: true
       }));
     
@@ -288,14 +288,15 @@ function App() {
     
     const getWalletAssetBalance = React.useCallback(async () => {
       const deroBridgeApi = deroBridgeApiRef.current;
-      const [err, res] = await to(deroBridgeApi.wallet('get-balance', { SCID: assetScid}));
+      const [err, res] = await to(deroBridgeApi.wallet('get-balance', { SCID: assetScid }));
       if (err) alert(err.message);
-      else 
-      {
-        const assetWalletBalance = res.data.result.balance;
+      else {
+        const rawAssetWalletBalance = res.data.result.balance;
+        const assetWalletBalance = (rawAssetWalletBalance / Math.pow(10, 5)).toFixed(5);
         setAssetWalletBalance(assetWalletBalance);
-        };
-    }, [assetScid])
+      }
+    }, [assetScid]);
+    
     
     
   return (

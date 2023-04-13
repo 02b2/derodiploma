@@ -1,17 +1,16 @@
-// Issue tokens after depositing DERO (Convert DERO to TOKENX)
-Function IssueTOKENX() Uint64
+// Issue tokens after depositing DERO (Convert DERO to PTN)
+Function IssuePTN() Uint64
 10  LET token_amount = DEROVALUE() / 100000 // Calculate the number of tokens to be issued (1 DERO = 100 tokens)
 20  SEND_ASSET_TO_ADDRESS(SIGNER(), token_amount, SCID()) // Increment balance of user, without knowing original balance, this is done homomorphically
 30  RETURN 0
 End Function
 
-// Convert TOKENX to DERO after depositing TOKENX. Smart Contract can give DERO, Only if DERO balance exists.
-Function ConvertTOKENX() Uint64
-10  LET dero_amount = ASSETVALUE(SCID()) * 100000 // Calculate the DERO amount to be given (100 TOKENX = 1 DERO)
+// Convert PTN to DERO after depositing PTN. Smart Contract can give DERO, Only if DERO balance exists.
+Function ConvertPTN() Uint64
+10  LET dero_amount = ASSETVALUE(SCID()) * 100000 // Calculate the DERO amount to be given (100 PTN = 1 DERO)
 20  SEND_DERO_TO_ADDRESS(SIGNER(), dero_amount) // Increment balance of user, without knowing original balance, this is done using Homomorphic Encryption.
 30  RETURN 0
 End Function
-
 
 // This function is used to initialize parameters during install time
 // InitializePrivate initializes a private SC
@@ -21,7 +20,7 @@ Function InitializePrivate() Uint64
 16 STORE("tokenSymbol", "PTN")
 17 STORE("tokenImageURL", "https://ibb.co/3MsRCQp")
 18 STORE("tokenDecimals", 5)
-30 SEND_ASSET_TO_ADDRESS(SIGNER(), 1600000, SCID()) // Gives initial encrypted balance of 1600000. 
+30 SEND_ASSET_TO_ADDRESS(SIGNER(), 160000000, SCID()) // Gives initial encrypted balance of 1600.00000 PTN. 
 40 RETURN 0 
 End Function
 
